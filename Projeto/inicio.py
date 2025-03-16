@@ -1,127 +1,97 @@
-# def menu_principal():
-#     print('\n===== Sistema de Gerenciamento de vendas =====')
-#     print('1. Cadastrar novo produto.')
-#     print('2. Registrar venda')
-#     print('3. Consultar produtos em estoque.')
-#     print('4. Relatório de produtos com estoque baixo.')
-#     print('5. Valor todal do estoque.')
-#     print('6. Análise de vendas por categoria.')
-#     print('7. Sair')
-#     return input('Esolha uma opção: ')
+estoque = {}
+categorias = set()
+vendas = []
 
-# def main():
-#     estoque = {}
-#     categorias = set()
-#     vendas = []
-#     while True:
-#         opcao = menu_principal()
-#         if menu_principal == '1':
-#             nome = input('Entre com o nome do produto: ')
-
-            
-# if __name__ == '__main__':
-#     main()
-
-
-
-# Estruturas de Dados Iniciais
-estoque = {}  # Dicionário para armazenar informações dos produtos
-categorias = set()  # Conjunto para gerenciar categorias únicas
-vendas = []  # Lista para guardar o histórico de vendas
-
-
-
-# Funções do Sistema
-def menu_principal():
-    """Exibe o menu principal"""
-    print("\n===== Sistema de Gerenciamento de Vendas =====")
-    print("1. Cadastrar novo produto")
-    print("2. Registrar venda")
-    print("3. Consultar produtos disponíveis")
-    print("4. Relatório de produtos com estoque baixo")
-    print("5. Valor total do estoque")
-    print("6. Análise de vendas por categoria")
-    print("7. Sair")
+def menu_inicial():
+    print('\n***** Sistema de Gerenciamento de Vendas *****\n')
+    print('Digite 1. Cadastro de novos produtos')
+    print('Digite 2. Vendas')
+    print('Digite 3. Consulta de produtos disponíveis')
+    print('Digite 4. Relatório de itens com o estoque baixo.')
+    print('Digite 5. Valor total em estoque.')
+    print('Digite 6. Análise de vendas por categoria.')
+    print('Digite 7. Para sair do programa.\n')
     return input("Escolha uma opção: ")
 
-def cadastrar_produto(estoque, categorias):
-    """Função para cadastrar um novo produto"""
-    codigo = input("Código do produto: ")
-    nome = input("Nome do produto: ")
-    preco = float(input("Preço do produto: "))
-    quantidade = int(input("Quantidade em estoque: "))
-    categoria = input("Categoria do produto: ")
+def cadastro(estoque, categorias):
+    codigo = int(input('Entre com o código do produto: '))
+    nome = input('Entre com o nome do produto: ')
+    valor = float(input('Entre com o valor do produto: '))
+    quantidade = int(input('Entre com a quantidade de itens: '))
+    categoria = input('Entre com a categoria: ')
 
-    estoque[codigo] = {"nome": nome, "preco": preco, "quantidade": quantidade, "categoria": categoria}
+    estoque[codigo] = {'nome': nome, 'valor': valor, 'quantidade': quantidade, 'categoria': categoria}
     categorias.add(categoria)
-    print("Produto cadastrado com sucesso!")
+    print('Cadastrado com sucesso!')
 
-def registrar_venda(estoque, vendas):
-    """Função para registrar uma venda e atualizar o estoque"""
-    codigo = input("Código do produto vendido: ")
+def registro_de_vendas(estoque, vendas):
+    codigo = input('Código do produto vendido: ')
     if codigo in estoque:
-        quantidade_vendida = int(input("Quantidade vendida: "))
-        if estoque[codigo]["quantidade"] >= quantidade_vendida:
-            estoque[codigo]["quantidade"] -= quantidade_vendida
-            vendas.append({"codigo": codigo, "quantidade": quantidade_vendida, "categoria": estoque[codigo]["categoria"]})
-            print("Venda registrada com sucesso!")
+        venda = int(input('Quantidade vendida: '))
+        if int(estoque[codigo]['quantidade']) >= venda:
+            estoque[codigo]['quantidade'] -= venda
+            vendas.append({'codigo': codigo, 'quantidade': venda, 'categoria': estoque[codigo]['categoria']})
+            print('Venda efetuada!')
         else:
-            print("Estoque insuficiente!")
+            print('Estoque baixo, não é possível efetuar a venda.')
     else:
-        print("Produto não encontrado!")
+        print('Produto não localizado.')
 
-def consultar_produtos(estoque):
-    """Exibe produtos disponíveis"""
-    print("\nProdutos disponíveis:")
-    for codigo, dados in estoque.items():
-        print(f"Código: {codigo}, Nome: {dados['nome']}, Quantidade: {dados['quantidade']}")
+def consulta_de_produtos(estoque):
+    print('\n* Produtos no estoque *')
+    for codigo, informacao in estoque.items():
+        print(f'Código: {codigo}, Nome: {informacao["nome"]}, Quantidade: {informacao["quantidade"]}')
 
-def relatorio_estoque_baixo(estoque):
-    """Relatório de produtos com estoque baixo"""
-    print("\nProdutos com estoque baixo:")
-    for codigo, dados in estoque.items():
-        if dados["quantidade"] < 5:
-            print(f"Código: {codigo}, Nome: {dados['nome']}, Quantidade: {dados['quantidade']}")
+def informacao_estoque_em_baixa(estoque):
+    print('\nProdutos com estoque em baixa:')
+    for codigo, informacao in estoque.items():
+        if int(informacao['quantidade']) < 5:
+            print(f'Código: {codigo}, Nome: {informacao["nome"]}, Quantidade: {informacao["quantidade"]}')
 
-def valor_total_estoque(estoque):
-    """Calcula o valor total do estoque"""
-    total = sum(dados["preco"] * dados["quantidade"] for dados in estoque.values())
-    print(f"\nValor total em estoque: R$ {total:.2f}")
+def valor_total(estoque):
+    total_valor = sum(float(informacao['valor']) * int(informacao['quantidade']) for informacao in estoque.values())
+    print(f'\nValor total do estoque é R$ {total_valor:.2f}')
 
-def analise_vendas_categoria(vendas):
-    """Análise de vendas por categoria"""
-    categorias_vendas = {}
+def analise_vendas(vendas):
+    vendas_por_categorias = {}
     for venda in vendas:
-        categoria = venda["categoria"]
-        categorias_vendas[categoria] = categorias_vendas.get(categoria, 0) + venda["quantidade"]
+        categoria = venda['categoria']
+        vendas_por_categorias[categoria] = vendas_por_categorias.get(categoria, 0) + venda['quantidade']
+    print('\nVendas por categoria:')
+    for categoria, quantidade in vendas_por_categorias.items():
+        print(f'Categoria: {categoria}, Total vendidos: {quantidade}')
 
-    print("\nVendas por categoria:")
-    for categoria, quantidade in categorias_vendas.items():
-        print(f"Categoria: {categoria}, Quantidade Vendida: {quantidade}")
-
-# Função Principal
 def main():
     while True:
-        opcao = menu_principal()
-        if opcao == "1":
-            cadastrar_produto(estoque, categorias)
-        elif opcao == "2":
-            registrar_venda(estoque, vendas)
-        elif opcao == "3":
-            consultar_produtos(estoque)
-        elif opcao == "4":
-            relatorio_estoque_baixo(estoque)
-        elif opcao == "5":
-            valor_total_estoque(estoque)
-        elif opcao == "6":
-            analise_vendas_categoria(vendas)
-        elif opcao == "7":
-            print("Saindo do sistema. Até mais!")
+        opcao = int(menu_inicial())
+        if opcao == 1:
+            cadastro(estoque, categorias)
+        elif opcao == 2:
+            registro_de_vendas(estoque, vendas)
+        elif opcao == 3:
+            consulta_de_produtos(estoque)
+        elif opcao == 4:
+            informacao_estoque_em_baixa(estoque)
+        elif opcao == 5:
+            valor_total(estoque)
+        elif opcao == 6:
+            analise_vendas(vendas)
+        elif opcao == 7:
+            print('Saindo do programa!')
             break
         else:
-            print("Opção inválida! Tente novamente.")
+            print('Opção inválida!')
 
 if __name__ == "__main__":
     main()
 
-    
+'''
+OBS: Preciso focar mais nestes assunto
+
+    1° Conjuntos (set): A estrutura set é usada para armazenar elementos únicos, ou seja, 
+    sem duplicatas. Se você tentar adicionar ao conjunto um valor que já existe, ele simplesmente 
+    será ignorado, sem gerar erros.
+    2° Função add: O método add() é utilizado em conjuntos para incluir um novo elemento. 
+    Ele adiciona o valor apenas se ele ainda não estiver no conjunto.
+'''
+
