@@ -86,7 +86,7 @@ if __name__ == "__main__":
     main()
 
 '''
-OBS: Preciso focar mais nestes assunto
+OBS: Preciso focar mais nestes assuntos
 
     1° Conjuntos (set): A estrutura set é usada para armazenar elementos únicos, ou seja, 
     sem duplicatas. Se você tentar adicionar ao conjunto um valor que já existe, ele simplesmente 
