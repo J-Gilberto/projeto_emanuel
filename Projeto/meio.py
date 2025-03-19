@@ -91,7 +91,7 @@ estoque = {}
 categorias = set()
 vendas = []
 
-def menu_inicial(): # menu inicial
+def menu_inicial(): # menu inicial, onde vai pedir para o colaborador entrar com o que deseja entre 1 a 7
     print(f'\n*** Sistema de Gereciamento de Vendas ***\n')
     print("1. Cadastrar novo produto")
     print("2. Registrar venda")
@@ -104,7 +104,8 @@ def menu_inicial(): # menu inicial
 # menu_inicial() vou manter todos os testes comentados.
 
 
-def cadastro_item(estoque, categorias):
+def cadastro_item(estoque, categorias): # cadastro de items no estoque por categoria.
+    print(f'\n*** Cadastro de items ***')
     codigo = int(input(f'Entre com o codigo do produto: '))
     nome = input(f'Entre com o nome do produto: ')
     categoria = input(f'Entre com a categoria do profuto: ')
@@ -123,6 +124,7 @@ def cadastro_item(estoque, categorias):
 
 
 def registrar_venda(estoque, vendas):
+    print(f'\n*** Registro de vendas ***')
     codigo = int(input(f'Entre com o codigo do item vendido: '))
     if codigo in estoque:
         venda = int(input(f'Entre com a quantidade de items vendidos: '))
@@ -140,14 +142,57 @@ def registrar_venda(estoque, vendas):
         print(f'Produto não localizado!')
 # registrar_venda(estoque, vendas)
 
+
 def consulta_item(estoque):
     print(f'\n*** Produtos do estoque ***\n')
     for codigo, info in estoque.items():
-        print(f'Código: {codigo}, Nome: {info["nome"]}, Quantidade: {info["quantidade"]}')
-consulta_item(estoque)           
+        print(f'Código: {codigo}\nNome: {info["nome"]}\nQuantidade: {info["quantidade"]}')
+# consulta_item(estoque)           
     
 
+def relatorio_de_items_em_Baixa(estoque):
+    print(f'\n*** Produtos do estoque em baixa ***\n')
+    for codigo, info, in estoque.items():
+        if int(info['quantidade']) < 5:
+          print(f'Código: {codigo}\nNome: {info["nome"]}\nQuantidade: {info["quantidade"]}')
+# relatorio_de_items_em_Baixa(estoque)    
 
 
+def valor_total_estoque(estoque):
+    valor_total_estoque = sum(float(info['valor']) * int(info['quantidade']) for info in estoque.values())
+    print(f'\n Valor total do estoque é de: R$ {valor_total_estoque:.2f}')
+# valor_total_estoque(estoque)
 
 
+def analise_de_vendas(vendas):
+    print(f'\n*** Vendas por categoria ***')
+    venda_categoria = {}
+    for venda in vendas:
+        categoria = venda['categoria']
+        venda_categoria['categoria'] = venda_categoria.get(categoria, 0) + venda['quantidade']
+    for categoria, quantidade in venda_categoria.items():
+        print(f'Categoria: {categoria}, total vendidos {quantidade}')
+# analise_de_vendas(vendas)
+
+
+def main():
+    while True:
+      opcao = int(menu_inicial())   
+      if opcao == 1:
+          cadastro_item(estoque, categorias) 
+      if opcao == 2:
+          registrar_venda(estoque, vendas) 
+      if opcao == 3:
+          consulta_item(estoque)
+      if opcao == 4:
+          relatorio_de_items_em_Baixa(estoque)
+      if opcao == 5:
+          valor_total_estoque(estoque)
+      if opcao == 6:
+          analise_de_vendas(vendas)
+      if opcao == 7:
+          break
+      else:
+          print(f'Opção invalida')
+if __name__ == "__main__":
+    main()
